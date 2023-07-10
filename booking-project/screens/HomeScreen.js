@@ -1,4 +1,5 @@
 import {
+  Button,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -6,7 +7,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
@@ -16,6 +17,11 @@ import DatePicker from "react-native-date-ranges";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [selectedDates, setSelectedDates] = useState();
+  const [rooms, setRoom] = useState(1);
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(3);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
@@ -41,6 +47,20 @@ const HomeScreen = () => {
       },
     });
   }, [navigation]);
+
+  const customButton = (onConfirm) => {
+    return (
+      <Button
+        onPress={onConfirm}
+        style={{
+          container: { width: "80%", marginHorizontal: "3%" },
+          text: { fontSize: 20 },
+        }}
+        primary
+        title="Enviar"
+      />
+    );
+  };
   return (
     <View>
       <Header />
@@ -66,7 +86,7 @@ const HomeScreen = () => {
             }}
           >
             <Feather name="search" size={24} color="black" />
-            <TextInput placeholder="INSIRA SEU DESTINO" />
+            <TextInput placeholderTextColor="black" placeholder="INSIRA SEU DESTINO" />
           </Pressable>
 
           <Pressable
@@ -108,14 +128,41 @@ const HomeScreen = () => {
               }}
               selectedBgColor="#0047AB"
               customButton={(onConfirm) => customButton(onConfirm)}
-              //onConfirm={}
+              onConfirm={(startDate, endDate) =>
+                setSelectedDates(startDate, endDate)
+              }
               allowFontScaling={false}
               placeholder={"SELECIONAR DATAS"}
               mode={"range"}
             />
           </Pressable>
 
-          <Pressable></Pressable>
+          <Pressable
+            style={{
+              flexDirection: "row",
+              alignContent: "center",
+              gap: 10,
+              paddingHorizontal: 10,
+              borderColor: "#FFC72C",
+              borderWidth: 2,
+              paddingVertical: 15,
+            }}
+          >
+            <Ionicons name="person-outline" size={24} color="black" />
+            <TextInput placeholderTextColor="red" placeholder="1 Quarto ° 2 Adultos ° 0 Crianças" />
+          </Pressable>
+
+          <Pressable
+            style={{
+              paddingHorizontal: 10,
+              borderColor: "#FFC72C",
+              borderWidth: 2,
+              paddingVertical: 15,
+              backgroundColor: "#2a52be",
+            }}
+          >
+            <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "500", color:"white"}}>Procurar</Text>
+          </Pressable>
         </View>
       </ScrollView>
     </View>
